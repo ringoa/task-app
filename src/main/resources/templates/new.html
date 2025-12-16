@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Task Form</title>
+</head>
+<body>
+<h2>タスクの入力フォーム</h2>
+
+<form method="post" th:action="@{/tasks/register}" th:object="${task}">
+  <p>
+    id: <input readonly th:field="*{id}" type="text"/>
+  </p>
+  <p>
+    タイトル: <input th:field="*{title}" type="text"/>
+  </p>
+  <select th:field="*{category}">
+    カテゴリ:
+    <option th:each="category : ${categories}" th:text="${category.label}"
+            th:value="${category}"/>
+  </select>
+  <p>
+    締め切り: <input th:field="*{dueDate}" type="date"/>
+  </p>
+  <button type="submit">登録する</button>
+</form>
+<a th:action="GET" th:href="@{/tasks}">一覧に戻る</a>
+</body>
+</html>
