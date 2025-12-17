@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-//タスクの保存と取得を行うインターフェース
-interface TaskRepository {
-
-  List<Task> taskList = new ArrayList<>();
+// タスクの保存と取得を行うインターフェース
+public interface TaskRepository {
 
   void saveTask(Task task);
 
@@ -18,6 +16,7 @@ interface TaskRepository {
 
   void deleteTask(Task task);
 
-  void updateTask(Task task);
+  void updateTask(Task task, Task existingTask);
 
+  long getNextId();
 }

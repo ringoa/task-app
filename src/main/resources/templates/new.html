@@ -9,9 +9,6 @@
 
 <form method="post" th:action="@{/tasks/register}" th:object="${task}">
   <p>
-    id: <input readonly th:field="*{id}" type="text"/>
-  </p>
-  <p>
     タイトル: <input th:field="*{title}" type="text"/>
   </p>
   <select th:field="*{category}">
