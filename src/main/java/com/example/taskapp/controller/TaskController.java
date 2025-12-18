@@ -3,10 +3,12 @@ package com.example.taskapp.controller;
 import com.example.taskapp.model.Category;
 import com.example.taskapp.model.Task;
 import com.example.taskapp.service.TaskService;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,9 +38,11 @@ public class TaskController {
   }
 
   @PostMapping("/tasks/register")
-  public String createTask(@ModelAttribute Task task, RedirectAttributes ra) {
-    if (!task.isValid()) {
-      throw new IllegalArgumentException("すべて入力してください");
+  public String createTask(@Valid @ModelAttribute Task task, BindingResult br,
+      RedirectAttributes ra, Model model) {
+    if (br.hasErrors()) {
+      model.addAttribute("categories", Category.values());
+      return "new";
     }
     taskService.createTask(task);
 
@@ -58,9 +62,11 @@ public class TaskController {
   }
 
   @PostMapping("/tasks/edit")
-  public String editTask(@ModelAttribute Task updatedTask, RedirectAttributes ra) {
-    if (!updatedTask.isValid()) {
-      throw new IllegalArgumentException("すべて入力してください");
+  public String editTask(@Valid @ModelAttribute Task updatedTask, BindingResult br,
+      RedirectAttributes ra, Model model) {
+    if (br.hasErrors()) {
+      model.addAttribute("categories", Category.values());
+      return "new";
     }
 
     taskService.updateTask(updatedTask);
@@ -71,10 +77,8 @@ public class TaskController {
   }
 
   @PostMapping("/tasks/delete")
-  public String getDelete(@RequestParam long id, Model model, RedirectAttributes ra) {
-    Task task = taskService.getTask(id);
-
-    taskService.deleteTask(task);
+  public String getDelete(@RequestParam long id, RedirectAttributes ra) {
+    taskService.deleteTask(id);
 
     ra.addFlashAttribute("message", "タスクを削除しました");
 

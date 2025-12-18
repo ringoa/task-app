@@ -3,6 +3,7 @@ package com.example.taskapp.service;
 import com.example.taskapp.model.Task;
 import com.example.taskapp.repository.TaskRepository;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 // タスクの登録、更新、削除、検索などのビジネスロジックを書く
@@ -26,8 +27,9 @@ public class TaskService {
     return repository.getTaskList();
   }
 
-  public void deleteTask(Task task) {
-    repository.deleteTask(task);
+  public void deleteTask(long id) {
+    Optional<Task> task = repository.getTaskById(id);
+    task.ifPresent(repository::deleteTask);
   }
 
   public void updateTask(Task updatedTask) {
