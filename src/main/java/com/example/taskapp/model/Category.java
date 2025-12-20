@@ -1,6 +1,5 @@
 package com.example.taskapp.model;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter

@@ -21,6 +21,11 @@ public class TaskController {
 
   private final TaskService taskService;
 
+  @ModelAttribute("categories")
+  public Category[] getCategories() {
+    return Category.values();
+  }
+
   @GetMapping("/tasks")
   public String showTasks(Model model) {
     List<Task> taskList = taskService.getTaskList();
@@ -32,16 +37,18 @@ public class TaskController {
   @GetMapping("/tasks/new")
   public String showTaskForm(Model model) {
     model.addAttribute("task", new Task());
-    model.addAttribute("categories", Category.values());
 
     return "new";
   }
 
   @PostMapping("/tasks/register")
-  public String createTask(@Valid @ModelAttribute Task task, BindingResult br,
-      RedirectAttributes ra, Model model) {
+  public String createTask(
+      @Valid @ModelAttribute Task task,
+      BindingResult br,
+      RedirectAttributes ra,
+      Model model
+  ) {
     if (br.hasErrors()) {
-      model.addAttribute("categories", Category.values());
       return "new";
     }
     taskService.createTask(task);
@@ -56,17 +63,19 @@ public class TaskController {
     Task task = taskService.getTask(id);
 
     model.addAttribute("task", task);
-    model.addAttribute("categories", Category.values());
 
     return "edit";
   }
 
   @PostMapping("/tasks/edit")
-  public String editTask(@Valid @ModelAttribute Task updatedTask, BindingResult br,
-      RedirectAttributes ra, Model model) {
+  public String editTask(
+      @Valid @ModelAttribute Task updatedTask,
+      BindingResult br,
+      RedirectAttributes ra,
+      Model model
+  ) {
     if (br.hasErrors()) {
-      model.addAttribute("categories", Category.values());
-      return "new";
+      return "edit";
     }
 
     taskService.updateTask(updatedTask);

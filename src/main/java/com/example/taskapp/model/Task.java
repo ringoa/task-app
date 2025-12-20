@@ -1,9 +1,6 @@
 package com.example.taskapp.model;
 
-import io.micrometer.common.util.StringUtils;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
