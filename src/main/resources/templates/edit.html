@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Task Edit Form</title>
+  <link rel="stylesheet" th:href="@{/edit.css}">
 </head>
 <body>
 <h2>タスクの編集フォーム</h2>
@@ -12,21 +13,21 @@
     id: <input readonly th:field="*{id}" type="text"/>
   </p>
   <p>
-    タイトル: <input th:field="*{title}" th:value="*{title}" type="text"/>
+    タイトル: <input th:field="*{title}" type="text"/>
+    <span class="field-error" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"></span>
   </p>
   <label>
     <select th:field="*{category}">
       カテゴリ:
+      <option value="">選択してください</option>
       <option th:each="category : ${categories}" th:text="${category.label}"
               th:value="${category}"></option>
     </select>
   </label>
+  <span class="field-error" th:errors="*{category}" th:if="${#fields.hasErrors('category')}"></span>
   <p>
-    <label>
-      締め切り:
-      <input th:field="*{dueDate}"
-             type="date"/>
-    </label>
+    締め切り: <input th:field="*{dueDate}" type="date"/>
+    <span class="field-error" th:errors="*{dueDate}" th:if="${#fields.hasErrors('dueDate')}"></span>
   </p>
   <button type="submit">編集する</button>
 </form>

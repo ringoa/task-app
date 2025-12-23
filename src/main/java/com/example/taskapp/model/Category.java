@@ -1,5 +1,8 @@
 package com.example.taskapp.model;
 
+import lombok.Getter;
+
+@Getter
 public enum Category {
   JAVA("Java"),
   SPRING("Spring"),
@@ -7,12 +10,8 @@ public enum Category {
 
   private final String label;
 
-
   Category(String label) {
     this.label = label;
   }
 
-  public String getLabel() {
-    return label;
-  }
 }

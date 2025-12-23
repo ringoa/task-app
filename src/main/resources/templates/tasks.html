@@ -27,7 +27,13 @@
     <td th:text="${task.category.getLabel()}"></td>
     <td th:text="${task.dueDate}"></td>
     <td><a th:href="@{/tasks/edit(id=${task.id})}">編集</a></td>
-    <td><a th:href="@{/tasks/delete(id=${task.id})}">削除</a></td>
+    <td>
+      <form th:action="@{/tasks/delete}" method="post">
+        <input type="hidden" name="id" th:value="${task.id}">
+        <button type="submit">削除</button>
+      </form>
+    </td>
+
   </tr>
   <tr th:if="${#lists.isEmpty(taskList)}">
     <td>タスクはありません</td>

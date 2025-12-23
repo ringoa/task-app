@@ -1,14 +1,17 @@
 package com.example.taskapp.repository;
 
 import com.example.taskapp.model.Task;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
-//TaskRepositoryの実装クラス
-//TaskServiceから呼び出される
+// TaskRepositoryの実装クラス
+// TaskServiceから呼び出される
 @Repository
 public class InMemoryTaskRepository implements TaskRepository {
+
+  List<Task> taskList = new ArrayList<>();
 
   @Override
   public void saveTask(Task task) {
@@ -36,15 +39,22 @@ public class InMemoryTaskRepository implements TaskRepository {
   }
 
   @Override
-  public void updateTask(Task updaetedTask) {
-    long id = updaetedTask.getId();
-
-    Task existingTask = getTaskById(id)
-        .orElseThrow(() -> new IllegalStateException("idが見つかりません"));
+  public void updateTask(Task updaetedTask, Task existingTask) {
 
     deleteTask(existingTask);
 
     saveTask(updaetedTask);
+  }
+
+  @Override
+  public long getNextId() {
+
+    long maxId = taskList.stream()
+        .mapToLong(Task::getId)
+        .max()
+        .orElse(0);
+
+    return maxId + 1;
   }
 
 }

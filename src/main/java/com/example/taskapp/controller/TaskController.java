@@ -3,9 +3,12 @@ package com.example.taskapp.controller;
 import com.example.taskapp.model.Category;
 import com.example.taskapp.model.Task;
 import com.example.taskapp.service.TaskService;
+import jakarta.validation.Valid;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,18 +16,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
+@RequiredArgsConstructor
 public class TaskController {
 
   private final TaskService taskService;
 
-  public TaskController(TaskService taskService) {
-    this.taskService = taskService;
+  @ModelAttribute("categories")
+  public Category[] getCategories() {
+    return Category.values();
   }
 
   @GetMapping("/tasks")
   public String showTasks(Model model) {
-    List<Task> tasklList = taskService.getTaskList();
-    model.addAttribute("taskList", tasklList);
+    List<Task> taskList = taskService.getTaskList();
+    model.addAttribute("taskList", taskList);
 
     return "tasks";
   }
@@ -33,13 +38,19 @@ public class TaskController {
   public String showTaskForm(Model model) {
     model.addAttribute("task", new Task());
 
-    model.addAttribute("categories", Category.values());
-
     return "new";
   }
 
   @PostMapping("/tasks/register")
-  public String createTask(@ModelAttribute Task task, RedirectAttributes ra) {
+  public String createTask(
+      @Valid @ModelAttribute Task task,
+      BindingResult br,
+      RedirectAttributes ra,
+      Model model
+  ) {
+    if (br.hasErrors()) {
+      return "new";
+    }
     taskService.createTask(task);
 
     ra.addFlashAttribute("message", "新しいタスクを登録しました");
@@ -49,28 +60,34 @@ public class TaskController {
 
   @GetMapping("/tasks/edit")
   public String showEditTask(Model model, @RequestParam long id) {
-    Task task = taskService.getTask(id)
-        .orElseThrow(() -> new IllegalArgumentException("idが存在しません"));
+    Task task = taskService.getTask(id);
 
     model.addAttribute("task", task);
-    model.addAttribute("categories", Category.values());
 
     return "edit";
   }
 
   @PostMapping("/tasks/edit")
-  public String editTask(@ModelAttribute Task updaetedTask, RedirectAttributes ra) {
-    taskService.updateTask(updaetedTask);
+  public String editTask(
+      @Valid @ModelAttribute Task updatedTask,
+      BindingResult br,
+      RedirectAttributes ra,
+      Model model
+  ) {
+    if (br.hasErrors()) {
+      return "edit";
+    }
+
+    taskService.updateTask(updatedTask);
 
     ra.addFlashAttribute("message", "タスクを更新しました");
+
     return "redirect:/tasks";
   }
 
-  @GetMapping("/tasks/delete")
-  public String getDelete(@RequestParam long id, Model mode, RedirectAttributes ra) {
-    Task task = taskService.getTask(id)
-        .orElseThrow(() -> new IllegalArgumentException("idが見つかりません"));
-    taskService.deleteTask(task);
+  @PostMapping("/tasks/delete")
+  public String getDelete(@RequestParam long id, RedirectAttributes ra) {
+    taskService.deleteTask(id);
 
     ra.addFlashAttribute("message", "タスクを削除しました");
 
