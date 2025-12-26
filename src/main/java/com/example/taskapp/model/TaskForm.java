@@ -6,17 +6,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
-// taskを表すクラス
 @Data
-@Table("tasks")
-public class Task {
-
-  @Id
-  private Long id;
+public class TaskForm {
 
   @NotBlank(message = "必須です")
   @Size(max = 50, message = "50文字までです")
@@ -29,5 +22,25 @@ public class Task {
   @FutureOrPresent(message = "本日以降の日付を入力してください")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate dueDate;
+
+  public Task toNewTask() {
+    Task task = new Task();
+    task.setTitle(this.title);
+    task.setCategory(this.category);
+    task.setDueDate(this.dueDate);
+
+    return task;
+  }
+
+  public Task toUpdatedTask(Task existingTask) {
+    Task task = new Task();
+    task.setId(existingTask.getId());
+    task.setTitle(this.title);
+    task.setCategory(this.category);
+    task.setDueDate(this.dueDate);
+
+    return task;
+  }
+
 
 }

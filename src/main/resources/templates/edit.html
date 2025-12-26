@@ -8,10 +8,7 @@
 <body>
 <h2>タスクの編集フォーム</h2>
 
-<form method="post" th:action="@{/tasks/edit}" th:object="${task}">
-  <p>
-    id: <input readonly th:field="*{id}" type="text"/>
-  </p>
+<form method="post" th:action="@{/tasks/{id}/edit(id=${id})}" th:object="${form}">
   <p>
     タイトル: <input th:field="*{title}" type="text"/>
     <span class="field-error" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"></span>

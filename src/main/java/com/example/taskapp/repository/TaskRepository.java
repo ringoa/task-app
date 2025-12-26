@@ -1,21 +1,38 @@
 package com.example.taskapp.repository;
 
+import com.example.taskapp.dao.TaskDao;
 import com.example.taskapp.model.Task;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
 
-// タスクの保存と取得を行うインターフェース
-public interface TaskRepository {
+// TaskRepositoryの実装クラス
+// TaskServiceから呼び出される
+@Repository
+@AllArgsConstructor
+public class TaskRepository {
 
-  void saveTask(Task task);
+  private final TaskDao dao;
 
-  List<Task> getTaskList();
+  public List<Task> findAll() {
+    List<Task> taskList = new ArrayList<>();
+    dao.findAll().forEach(taskList::add);
 
-  Optional<Task> getTaskById(long id);
+    return taskList;
+  }
 
-  void deleteTask(Task task);
+  public void saveTask(Task task) {
+    dao.save(task);
+  }
 
-  void updateTask(Task task, Task existingTask);
+  public Optional<Task> getTaskById(long id) {
+    return dao.findById(id);
+  }
 
-  long getNextId();
+  public void deleteTask(Long id) {
+    dao.deleteById(id);
+  }
+
 }

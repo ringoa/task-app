@@ -1,47 +1,48 @@
 package com.example.taskapp.service;
 
 import com.example.taskapp.model.Task;
+import com.example.taskapp.model.TaskForm;
 import com.example.taskapp.repository.TaskRepository;
 import java.util.List;
-import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 // タスクの登録、更新、削除、検索などのビジネスロジックを書く
 // TaskControllerから呼び出される
 @Service
+@AllArgsConstructor
 public class TaskService {
 
   private final TaskRepository repository;
 
-  public TaskService(TaskRepository repository) {
-    this.repository = repository;
-  }
-
-  public void createTask(Task task) {
-    long id = repository.getNextId();
-    task.setId(id);
+  @Transactional
+  public void createTask(TaskForm form) {
+    Task task = form.toNewTask();
     repository.saveTask(task);
   }
 
   public List<Task> getTaskList() {
-    return repository.getTaskList();
+    return repository.findAll();
   }
 
+  @Transactional
   public void deleteTask(long id) {
-    Optional<Task> task = repository.getTaskById(id);
-    task.ifPresent(repository::deleteTask);
+    repository.deleteTask(id);
   }
 
-  public void updateTask(Task updatedTask) {
-    long id = updatedTask.getId();
-    Task existingTask = getTask(id);
+  @Transactional
+  public void updateTask(Long id, TaskForm form) {
+    Task existingTask = repository.getTaskById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Task not found"));
+    Task updatedTask = form.toUpdatedTask(existingTask);
 
-    repository.updateTask(updatedTask, existingTask);
+    repository.saveTask(updatedTask);
   }
 
   public Task getTask(long id) {
     return repository.getTaskById(id)
-        .orElseThrow(() -> new IllegalArgumentException("idが存在しません"));
+        .orElseThrow(() -> new IllegalArgumentException("Task not found"));
   }
 
 }
