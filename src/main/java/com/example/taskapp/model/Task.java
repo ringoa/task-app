@@ -18,15 +18,10 @@ public class Task {
   @Id
   private Long id;
 
-  @NotBlank(message = "必須です")
-  @Size(max = 50, message = "50文字までです")
   private String title;
 
-  @NotNull(message = "選択してください")
   private Category category;
 
-  @NotNull(message = "必須です")
-  @FutureOrPresent(message = "本日以降の日付を入力してください")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate dueDate;
 

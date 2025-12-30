@@ -2,7 +2,6 @@ package com.example.taskapp.repository;
 
 import com.example.taskapp.dao.TaskDao;
 import com.example.taskapp.model.Task;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -17,10 +16,7 @@ public class TaskRepository {
   private final TaskDao dao;
 
   public List<Task> findAll() {
-    List<Task> taskList = new ArrayList<>();
-    dao.findAll().forEach(taskList::add);
-
-    return taskList;
+    return dao.findAll();
   }
 
   public void saveTask(Task task) {

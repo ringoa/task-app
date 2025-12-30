@@ -14,10 +14,8 @@ public class GlobalExceptionHandler {
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public String notFoundTaskException(
       IllegalArgumentException ex,
-      Model model,
-      HttpServletResponse res
+      Model model
   ) {
-    res.setStatus(HttpServletResponse.SC_NOT_FOUND);
     model.addAttribute("exception", ex.getClass().getSimpleName());
     model.addAttribute("message", ex.getMessage());
     return "error/not-found-task";

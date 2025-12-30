@@ -62,10 +62,7 @@ public class TaskController {
   public String showEditTask(Model model, @PathVariable long id) {
     Task task = taskService.getTask(id);
 
-    TaskForm form = new TaskForm();
-    form.setTitle(task.getTitle());
-    form.setCategory(task.getCategory());
-    form.setDueDate(task.getDueDate());
+    TaskForm form = new TaskForm(task.getTitle(),task.getCategory(),task.getDueDate());
 
     model.addAttribute("form", form);
     model.addAttribute("id", id);

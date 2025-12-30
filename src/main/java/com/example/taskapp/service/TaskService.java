@@ -44,5 +44,4 @@ public class TaskService {
     return repository.getTaskById(id)
         .orElseThrow(() -> new IllegalArgumentException("Task not found"));
   }
-
 }
