@@ -26,10 +26,10 @@
     <td th:text="${task.title}"></td>
     <td th:text="${task.category.getLabel()}"></td>
     <td th:text="${task.dueDate}"></td>
-    <td><a th:href="@{/tasks/edit(id=${task.id})}">編集</a></td>
+    <td><a th:href="@{/tasks/{id}/edit(id=${task.id})}">編集</a></td>
     <td>
-      <form th:action="@{/tasks/delete}" method="post">
-        <input type="hidden" name="id" th:value="${task.id}">
+      <form method="post" th:action="@{/tasks/{id}/delete(id=${task.id})}">
+        <input name="id" th:value="${task.id}" type="hidden">
         <button type="submit">削除</button>
       </form>
     </td>

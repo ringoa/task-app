@@ -2,6 +2,7 @@ package com.example.taskapp.controller;
 
 import com.example.taskapp.model.Category;
 import com.example.taskapp.model.Task;
+import com.example.taskapp.model.TaskForm;
 import com.example.taskapp.service.TaskService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -11,8 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -36,17 +37,16 @@ public class TaskController {
 
   @GetMapping("/tasks/new")
   public String showTaskForm(Model model) {
-    model.addAttribute("task", new Task());
+    model.addAttribute("form", new TaskForm());
 
     return "new";
   }
 
   @PostMapping("/tasks/register")
   public String createTask(
-      @Valid @ModelAttribute Task task,
+      @Valid @ModelAttribute("form") TaskForm task,
       BindingResult br,
-      RedirectAttributes ra,
-      Model model
+      RedirectAttributes ra
   ) {
     if (br.hasErrors()) {
       return "new";
@@ -58,35 +58,38 @@ public class TaskController {
     return "redirect:/tasks";
   }
 
-  @GetMapping("/tasks/edit")
-  public String showEditTask(Model model, @RequestParam long id) {
+  @GetMapping("/tasks/{id}/edit")
+  public String showEditTask(Model model, @PathVariable long id) {
     Task task = taskService.getTask(id);
 
-    model.addAttribute("task", task);
+    TaskForm form = new TaskForm(task.getTitle(),task.getCategory(),task.getDueDate());
+
+    model.addAttribute("form", form);
+    model.addAttribute("id", id);
 
     return "edit";
   }
 
-  @PostMapping("/tasks/edit")
+  @PostMapping("/tasks/{id}/edit")
   public String editTask(
-      @Valid @ModelAttribute Task updatedTask,
+      @PathVariable Long id,
+      @Valid @ModelAttribute("form") TaskForm updatedTask,
       BindingResult br,
-      RedirectAttributes ra,
-      Model model
+      RedirectAttributes ra
   ) {
     if (br.hasErrors()) {
       return "edit";
     }
 
-    taskService.updateTask(updatedTask);
+    taskService.updateTask(id, updatedTask);
 
     ra.addFlashAttribute("message", "タスクを更新しました");
 
     return "redirect:/tasks";
   }
 
-  @PostMapping("/tasks/delete")
-  public String getDelete(@RequestParam long id, RedirectAttributes ra) {
+  @PostMapping("/tasks/{id}/delete")
+  public String getDelete(@PathVariable long id, RedirectAttributes ra) {
     taskService.deleteTask(id);
 
     ra.addFlashAttribute("message", "タスクを削除しました");
