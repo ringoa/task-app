@@ -21,7 +21,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr th:each="task : ${taskList}">
+  <tr th:each="task : ${taskPage.content}">
     <td th:text="${task.id}"></td>
     <td th:text="${task.title}"></td>
     <td th:text="${task.category.getLabel()}"></td>
@@ -35,11 +35,50 @@
     </td>
 
   </tr>
-  <tr th:if="${#lists.isEmpty(taskList)}">
+  <tr th:if="${taskPage.totalElements == 0}">
     <td>タスクはありません</td>
   </tr>
   </tbody>
 </table>
 <a method="GET" th:href="@{/tasks/new}">タスクの新規作成</a>
+
+<div class="size">
+  <form action="/tasks" method="get">
+    <label for="size">表示件数を選んでください</label>
+    <select id="size" name="size">
+      <option value="3" th:selected="${size == 3}">3</option>
+      <option value="5" th:selected="${size == 5}">5</option>
+      <option value="7" th:selected="${size == 7}">7</option>
+    </select>
+    <button type="submit">送信</button>
+  </form>
+</div>
+
+<div class="summary">
+  全<strong th:text="${taskPage.totalElements}"></strong>件中
+  <strong th:text="${taskPage.number * taskPage.size + 1}"></strong>~
+  <strong th:text="${taskPage.number * taskPage.size + taskPage.numberOfElements}"></strong>件目を表示しています
+</div>
+
+<div class="pagination" th:if="${taskPage.totalPages > 1}">
+  <span class="page-item" th:if="${currentPage > 0}">
+    <a class="page-link" th:href="@{/tasks(page=${currentPage - 1}, size=${size})}">前へ |</a>
+  </span>
+  <span class="page-item" th:if="${currentPage == 0}">
+    <span class="page-disabled">前へ |</span>
+  </span>
+
+  <span class="page-item" th:text="${currentPage + 1}"></span> /
+  <span th:text="${taskPage.totalPages}"></span>
+
+  <span class="page-item" th:if="${currentPage + 1 < taskPage.totalPages}">
+    <a class="page-link" th:href="@{/tasks(page=${currentPage + 1}, size=${size})}">| 次へ</a>
+  </span>
+
+  <span class="page-item" th:if="${currentPage >= taskPage.totalPages - 1}">
+    <span class="page-disabled">| 次へ</span>
+  </span>
+</div>
+
 </body>
 </html>

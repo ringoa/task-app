@@ -1,11 +1,11 @@
 package com.example.taskapp.controller;
 
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -19,5 +19,16 @@ public class GlobalExceptionHandler {
     model.addAttribute("exception", ex.getClass().getSimpleName());
     model.addAttribute("message", ex.getMessage());
     return "error/not-found-task";
+  }
+
+  @ExceptionHandler({MethodArgumentTypeMismatchException.class, PageNotFoundException.class})
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public String handlePageNotNumber(
+      Model model,
+      Exception ex
+  ) {
+    model.addAttribute("exception", ex.getClass().getSimpleName());
+    model.addAttribute("message", ex.getMessage());
+    return "error/page-missing";
   }
 }

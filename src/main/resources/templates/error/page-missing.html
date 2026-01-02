@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Not Fund Task Error</title>
+  <link rel="stylesheet" th:href="@{/error.css}">
+</head>
+<body>
+<h2>ページが見つかりません</h2>
+<p th:text="${exception}"></p>
+<p th:text="${message}"></p>
+<a th:href="@{/tasks}">一覧に戻る</a>
+</body>
+</html>
