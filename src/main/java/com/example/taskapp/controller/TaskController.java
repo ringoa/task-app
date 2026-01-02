@@ -5,6 +5,7 @@ import com.example.taskapp.model.Task;
 import com.example.taskapp.model.TaskForm;
 import com.example.taskapp.service.TaskService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -30,19 +31,13 @@ public class TaskController {
 
   @GetMapping("/tasks")
   public String showTasks(
-      @RequestParam(name = "page", defaultValue = "0") int page,
-      @RequestParam(name = "size", defaultValue = "5") int size,
+      @RequestParam(defaultValue = "0")
+      @Min(value = 0, message = "ページがありません") int page,
+      @RequestParam(defaultValue = "5") int size,
       Model model
   ) {
-    if (page < 0) {
-      throw new PageNotFoundException("ページがありません page: " + page);
-    }
-
     Page<Task> taskPage = taskService.getPage(page, size);
 
-    if (page > taskPage.getTotalPages()) {
-      throw new PageNotFoundException("ページがありません page: " + page);
-    }
     model.addAttribute("taskPage", taskPage);
     model.addAttribute("currentPage", page);
     model.addAttribute("size", size);

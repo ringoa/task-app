@@ -34,7 +34,7 @@ public class TaskRepository {
     dao.deleteById(id);
   }
 
-  public Page<Task> findPageOrderedByIdDesc(int page, int size){
+  public Page<Task> findPageOrderedByIdDesc(int page, int size) {
     int offset = page * size;
     List<Task> content = dao.findPageOrderByIdDesc(size, offset);
     long total = dao.countAll();

@@ -1,5 +1,6 @@
 package com.example.taskapp.service;
 
+import com.example.taskapp.controller.PageNotFoundException;
 import com.example.taskapp.model.Task;
 import com.example.taskapp.model.TaskForm;
 import com.example.taskapp.repository.TaskRepository;
@@ -47,7 +48,11 @@ public class TaskService {
   }
 
   @Transactional(readOnly = true)
-  public Page<Task> getPage(int page, int size){
-    return repository.findPageOrderedByIdDesc(page, size);
+  public Page<Task> getPage(int page, int size) {
+    Page<Task> taskPage = repository.findPageOrderedByIdDesc(page, size);
+    if (page >= taskPage.getTotalPages()) {
+      throw new PageNotFoundException("ページがありません");
+    }
+    return taskPage;
   }
 }
