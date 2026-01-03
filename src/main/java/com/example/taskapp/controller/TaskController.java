@@ -5,8 +5,9 @@ import com.example.taskapp.model.Task;
 import com.example.taskapp.model.TaskForm;
 import com.example.taskapp.service.TaskService;
 import jakarta.validation.Valid;
-import java.util.List;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -28,9 +30,17 @@ public class TaskController {
   }
 
   @GetMapping("/tasks")
-  public String showTasks(Model model) {
-    List<Task> taskList = taskService.getTaskList();
-    model.addAttribute("taskList", taskList);
+  public String showTasks(
+      @RequestParam(defaultValue = "0")
+      @Min(value = 0, message = "ページがありません") int page,
+      @RequestParam(defaultValue = "5") int size,
+      Model model
+  ) {
+    Page<Task> taskPage = taskService.getPage(page, size);
+
+    model.addAttribute("taskPage", taskPage);
+    model.addAttribute("currentPage", page);
+    model.addAttribute("size", size);
 
     return "tasks";
   }
@@ -62,7 +72,7 @@ public class TaskController {
   public String showEditTask(Model model, @PathVariable long id) {
     Task task = taskService.getTask(id);
 
-    TaskForm form = new TaskForm(task.getTitle(),task.getCategory(),task.getDueDate());
+    TaskForm form = new TaskForm(task.getTitle(), task.getCategory(), task.getDueDate());
 
     model.addAttribute("form", form);
     model.addAttribute("id", id);

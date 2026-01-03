@@ -1,10 +1,12 @@
 package com.example.taskapp.service;
 
+import com.example.taskapp.controller.PageNotFoundException;
 import com.example.taskapp.model.Task;
 import com.example.taskapp.model.TaskForm;
 import com.example.taskapp.repository.TaskRepository;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,5 +45,14 @@ public class TaskService {
   public Task getTask(long id) {
     return repository.getTaskById(id)
         .orElseThrow(() -> new IllegalArgumentException("Task not found"));
+  }
+
+  @Transactional(readOnly = true)
+  public Page<Task> getPage(int page, int size) {
+    Page<Task> taskPage = repository.findPageOrderedByIdDesc(page, size);
+    if (page >= taskPage.getTotalPages()) {
+      throw new PageNotFoundException("ページがありません");
+    }
+    return taskPage;
   }
 }

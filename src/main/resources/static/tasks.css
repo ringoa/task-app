@@ -20,3 +20,42 @@ td {
   border-bottom: 1px solid #e0e0e0;
 }
 
+.summary {
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* ページネーション */
+.pagination {
+  margin-top: 16px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.page-item {
+  display: inline-block;
+}
+.page-link,
+.page-disabled {
+  padding: 4px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: inline-block;
+  background: #fff;
+  color: #333;
+}
+.page-current {
+  background: #333;
+  color: #fff;
+  border-color: #333;
+  cursor: default;
+}
+.page-disabled {
+  color: #aaa;
+  border-color: #eee;
+  cursor: not-allowed;
+}
