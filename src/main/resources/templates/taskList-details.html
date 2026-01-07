@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Category Details</title>
+  <link rel="stylesheet" th:href="@{/tasks.css}">
+</head>
+<body>
+<h2>カテゴリに紐づくタスク一覧</h2>
+<table>
+  <thead>
+  <tr>
+    <th>id</th>
+    <th>タイトル</th>
+    <th>カテゴリ</th>
+    <th>期限</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="task : ${taskList}">
+    <td th:text="${task.id}"></td>
+    <td th:text="${task.title}"></td>
+    <td th:each="category : ${categoryList}"
+        th:if="${category.id == task.categoryId}"
+        th:text="${category.name}"></td>
+    <td th:text="${task.dueDate}"></td>
+  </tbody>
+</table>
+</body>
+</html>

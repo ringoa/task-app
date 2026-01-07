@@ -24,7 +24,9 @@
   <tr th:each="task : ${taskPage.content}">
     <td th:text="${task.id}"></td>
     <td th:text="${task.title}"></td>
-    <td th:text="${task.category.getLabel()}"></td>
+    <td th:each="category : ${categoryList}"
+        th:if="${category.id == task.categoryId}"
+        th:text="${category.name}"></td>
     <td th:text="${task.dueDate}"></td>
     <td><a th:href="@{/tasks/{id}/edit(id=${task.id})}">編集</a></td>
     <td>
@@ -46,9 +48,9 @@
   <form action="/tasks" method="get">
     <label for="size">表示件数を選んでください</label>
     <select id="size" name="size">
-      <option value="3" th:selected="${size == 3}">3</option>
-      <option value="5" th:selected="${size == 5}">5</option>
-      <option value="7" th:selected="${size == 7}">7</option>
+      <option th:selected="${size == 3}" value="3">3</option>
+      <option th:selected="${size == 5}" value="5">5</option>
+      <option th:selected="${size == 7}" value="7">7</option>
     </select>
     <button type="submit">送信</button>
   </form>

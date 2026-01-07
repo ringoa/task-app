@@ -20,7 +20,7 @@ public class TaskForm {
   private String title;
 
   @NotNull(message = "選択してください")
-  private Category category;
+  private Long categoryId;
 
   @NotNull(message = "必須です")
   @FutureOrPresent(message = "本日以降の日付を入力してください")
@@ -30,7 +30,7 @@ public class TaskForm {
   public Task toNewTask() {
     Task task = new Task();
     task.setTitle(this.title);
-    task.setCategory(this.category);
+    task.setCategoryId(this.categoryId);
     task.setDueDate(this.dueDate);
 
     return task;
@@ -40,7 +40,7 @@ public class TaskForm {
     Task task = new Task();
     task.setId(existingTask.getId());
     task.setTitle(this.title);
-    task.setCategory(this.category);
+    task.setCategoryId(this.categoryId);
     task.setDueDate(this.dueDate);
 
     return task;

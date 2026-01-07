@@ -32,16 +32,7 @@ public class TaskService {
   public void deleteTask(long id) {
     repository.deleteTask(id);
   }
-
-  @Transactional
-  public void updateTask(Long id, TaskForm form) {
-    Task existingTask = repository.getTaskById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Task not found"));
-    Task updatedTask = form.toUpdatedTask(existingTask);
-
-    repository.saveTask(updatedTask);
-  }
-
+  
   public Task getTask(long id) {
     return repository.getTaskById(id)
         .orElseThrow(() -> new IllegalArgumentException("Task not found"));
