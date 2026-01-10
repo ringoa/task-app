@@ -24,7 +24,7 @@
   <tr th:each="task : ${taskPage.content}">
     <td th:text="${task.id}"></td>
     <td th:text="${task.title}"></td>
-    <td th:each="category : ${categoryList}"
+    <td th:each="category : ${categories}"
         th:if="${category.id == task.categoryId}"
         th:text="${category.name}"></td>
     <td th:text="${task.dueDate}"></td>

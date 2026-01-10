@@ -1,10 +1,11 @@
 package com.example.taskapp.service;
 
+import com.example.taskapp.controller.CategoryNotFoundException;
 import com.example.taskapp.controller.PageNotFoundException;
 import com.example.taskapp.model.Task;
 import com.example.taskapp.model.TaskForm;
+import com.example.taskapp.repository.CategoryRepository;
 import com.example.taskapp.repository.TaskRepository;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -16,31 +17,44 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 public class TaskService {
 
-  private final TaskRepository repository;
+  private final TaskRepository TaskRepository;
+  private final CategoryRepository categoryRepository;
 
   @Transactional
-  public void createTask(TaskForm form) {
+  public void create(TaskForm form) {
+    categoryRepository.findById(form.getCategoryId())
+        .orElseThrow(() -> new CategoryNotFoundException("not found category"));
     Task task = form.toNewTask();
-    repository.saveTask(task);
-  }
-
-  public List<Task> getTaskList() {
-    return repository.findAll();
+    TaskRepository.save(task);
   }
 
   @Transactional
-  public void deleteTask(long id) {
-    repository.deleteTask(id);
+  public void update(Long id, TaskForm form) {
+    Task existingTask = TaskRepository.getTaskById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Task not found"));
+
+    categoryRepository.findById(form.getCategoryId())
+        .orElseThrow(() -> new CategoryNotFoundException("not found category"));
+
+    Task updatedTask = form.toUpdatedTask(existingTask);
+
+    TaskRepository.save(updatedTask);
   }
-  
+
+  @Transactional
+  public void delete(long id) {
+    TaskRepository.delete(id);
+  }
+
+  @Transactional(readOnly = true)
   public Task getTask(long id) {
-    return repository.getTaskById(id)
+    return TaskRepository.getTaskById(id)
         .orElseThrow(() -> new IllegalArgumentException("Task not found"));
   }
 
   @Transactional(readOnly = true)
   public Page<Task> getPage(int page, int size) {
-    Page<Task> taskPage = repository.findPageOrderedByIdDesc(page, size);
+    Page<Task> taskPage = TaskRepository.findPageOrderedByIdDesc(page, size);
     if (page >= taskPage.getTotalPages()) {
       throw new PageNotFoundException("ページがありません");
     }

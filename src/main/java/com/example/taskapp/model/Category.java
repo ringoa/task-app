@@ -1,6 +1,5 @@
 package com.example.taskapp.model;
 
-import java.util.HashSet;
 import java.util.Set;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -17,11 +16,4 @@ public class Category {
 
   @MappedCollection(idColumn = "category_id")
   private Set<Task> tasks;
-
-  public void addTask(Task task) {
-    if (this.tasks == null) {
-      this.tasks = new HashSet<>();
-    }
-    this.tasks.add(task);
-  }
 }

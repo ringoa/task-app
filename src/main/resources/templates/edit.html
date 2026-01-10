@@ -20,7 +20,7 @@
       カテゴリ:
       <option value="">選択してください</option>
       <option value="500">データにないカテゴリID</option>
-      <option th:each="category : ${categoryList}" th:text="${category.name}"
+      <option th:each="category : ${categories}" th:text="${category.name}"
               th:value="${category.id}"></option>
     </select>
   </label>

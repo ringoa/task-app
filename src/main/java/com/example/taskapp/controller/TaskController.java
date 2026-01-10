@@ -27,9 +27,9 @@ public class TaskController {
   private final TaskService taskService;
   private final CategoryService categoryService;
 
-  @ModelAttribute("categoryList")
+  @ModelAttribute("categories")
   public List<Category> getCategories() {
-    return categoryService.getCategoriesList();
+    return categoryService.getCategories();
   }
 
   @GetMapping("/tasks")
@@ -64,8 +64,8 @@ public class TaskController {
     if (br.hasErrors()) {
       return "new";
     }
-    //how to define and check invalid category value
-    categoryService.addTaskByCategory(task);
+
+    taskService.create(task);
 
     ra.addFlashAttribute("message", "新しいタスクを登録しました");
 
@@ -94,7 +94,7 @@ public class TaskController {
     if (br.hasErrors()) {
       return "edit";
     }
-    categoryService.updateCategoryTask(id, updatedTask);
+    taskService.update(id, updatedTask);
 
     ra.addFlashAttribute("message", "タスクを更新しました");
 
@@ -103,7 +103,7 @@ public class TaskController {
 
   @PostMapping("/tasks/{id}/delete")
   public String getDelete(@PathVariable long id, RedirectAttributes ra) {
-    taskService.deleteTask(id);
+    taskService.delete(id);
 
     ra.addFlashAttribute("message", "タスクを削除しました");
 

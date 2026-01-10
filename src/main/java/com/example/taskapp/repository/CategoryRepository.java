@@ -13,15 +13,11 @@ public class CategoryRepository {
 
   private final CategoryDao dao;
 
-  public Optional<Category> findById(long categoryId){
+  public Optional<Category> findById(long categoryId) {
     return dao.findById(categoryId);
-  };
-
-  public List<Category> findAll(){
-    return dao.findAll();
   }
 
-  public void save(Category category){
-    dao.save(category);
+  public List<Category> findAll() {
+    return dao.findAllByOrderByIdAsc();
   }
 }
