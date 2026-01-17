@@ -3,9 +3,11 @@ package com.example.taskapp.controller;
 import com.example.taskapp.model.Category;
 import com.example.taskapp.model.Task;
 import com.example.taskapp.model.TaskForm;
+import com.example.taskapp.service.CategoryService;
 import com.example.taskapp.service.TaskService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -23,10 +25,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class TaskController {
 
   private final TaskService taskService;
+  private final CategoryService categoryService;
 
   @ModelAttribute("categories")
-  public Category[] getCategories() {
-    return Category.values();
+  public List<Category> getCategories() {
+    return categoryService.getCategories();
   }
 
   @GetMapping("/tasks")
@@ -61,7 +64,8 @@ public class TaskController {
     if (br.hasErrors()) {
       return "new";
     }
-    taskService.createTask(task);
+
+    taskService.create(task);
 
     ra.addFlashAttribute("message", "新しいタスクを登録しました");
 
@@ -72,7 +76,7 @@ public class TaskController {
   public String showEditTask(Model model, @PathVariable long id) {
     Task task = taskService.getTask(id);
 
-    TaskForm form = new TaskForm(task.getTitle(), task.getCategory(), task.getDueDate());
+    TaskForm form = new TaskForm(task.getTitle(), task.getCategoryId(), task.getDueDate());
 
     model.addAttribute("form", form);
     model.addAttribute("id", id);
@@ -90,8 +94,7 @@ public class TaskController {
     if (br.hasErrors()) {
       return "edit";
     }
-
-    taskService.updateTask(id, updatedTask);
+    taskService.update(id, updatedTask);
 
     ra.addFlashAttribute("message", "タスクを更新しました");
 
@@ -100,7 +103,7 @@ public class TaskController {
 
   @PostMapping("/tasks/{id}/delete")
   public String getDelete(@PathVariable long id, RedirectAttributes ra) {
-    taskService.deleteTask(id);
+    taskService.delete(id);
 
     ra.addFlashAttribute("message", "タスクを削除しました");
 

@@ -18,11 +18,7 @@ public class TaskRepository {
 
   private final TaskDao dao;
 
-  public List<Task> findAll() {
-    return dao.findAll();
-  }
-
-  public void saveTask(Task task) {
+  public void save(Task task) {
     dao.save(task);
   }
 
@@ -30,7 +26,7 @@ public class TaskRepository {
     return dao.findById(id);
   }
 
-  public void deleteTask(Long id) {
+  public void delete(Long id) {
     dao.deleteById(id);
   }
 

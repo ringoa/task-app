@@ -1,12 +1,17 @@
-TRUNCATE TABLE tasks RESTART IDENTITY CASCADE;
+TRUNCATE TABLE categories, tasks RESTART IDENTITY CASCADE;
 
-INSERT INTO tasks (title, category, due_date) VALUES
-('タイトル１', 'SPRING', CURRENT_DATE),
-('タイトル2', 'JAVA', CURRENT_DATE),
-('タイトル3', 'JAVA', CURRENT_DATE),
-('タイトル4', 'JAVA', CURRENT_DATE),
-('タイトル5', 'JAVA', CURRENT_DATE),
-('タイトル6', 'JAVA', CURRENT_DATE),
-('タイトル7', 'JAVA', CURRENT_DATE),
-('タイトル8', 'JAVA', CURRENT_DATE),
-('タイトル9', 'JAVA', CURRENT_DATE);
+INSERT INTO categories (name) VALUES
+('Java'),
+('Spring'),
+('その他');
+
+INSERT INTO tasks (title, category_id, due_date) VALUES
+('タイトル１', 2, CURRENT_DATE),
+('タイトル2', 1, CURRENT_DATE),
+('タイトル3', 1, CURRENT_DATE),
+('タイトル4', 3, CURRENT_DATE),
+('タイトル5', 1, CURRENT_DATE),
+('タイトル6', 2, CURRENT_DATE),
+('タイトル7', 3, CURRENT_DATE),
+('タイトル8', 1, CURRENT_DATE),
+('タイトル9', 2, CURRENT_DATE);

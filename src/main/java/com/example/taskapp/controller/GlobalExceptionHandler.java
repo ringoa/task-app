@@ -25,7 +25,8 @@ public class GlobalExceptionHandler {
   @ExceptionHandler({
       MethodArgumentTypeMismatchException.class,
       PageNotFoundException.class,
-      HandlerMethodValidationException.class
+      HandlerMethodValidationException.class,
+      CategoryNotFoundException.class
   })
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public String handlePageNotNumber(

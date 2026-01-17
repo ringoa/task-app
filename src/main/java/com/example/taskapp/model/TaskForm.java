@@ -20,7 +20,7 @@ public class TaskForm {
   private String title;
 
   @NotNull(message = "選択してください")
-  private Category category;
+  private Long categoryId;
 
   @NotNull(message = "必須です")
   @FutureOrPresent(message = "本日以降の日付を入力してください")
@@ -28,21 +28,11 @@ public class TaskForm {
   private LocalDate dueDate;
 
   public Task toNewTask() {
-    Task task = new Task();
-    task.setTitle(this.title);
-    task.setCategory(this.category);
-    task.setDueDate(this.dueDate);
-
+    Task task = new Task(null, this.categoryId, this.title, this.dueDate);
     return task;
   }
 
   public Task toUpdatedTask(Task existingTask) {
-    Task task = new Task();
-    task.setId(existingTask.getId());
-    task.setTitle(this.title);
-    task.setCategory(this.category);
-    task.setDueDate(this.dueDate);
-
-    return task;
+    return new Task(existingTask.getId(), this.categoryId, this.title, this.dueDate);
   }
 }

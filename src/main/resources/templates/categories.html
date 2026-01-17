@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Category List</title>
+  <link rel="stylesheet" th:href="@{/tasks.css}">
+</head>
+<body>
+<h2>カテゴリ一覧</h2>
+<table>
+  <thead>
+  <tr>
+    <td>カテゴリ名</td>
+    <td>カテゴリID</td>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="category : ${categories}">
+    <td th:text="${category.name}"></td>
+    <td th:text="${category.id}"></td>
+    <td>
+      <a th:href="@{categories/{categoryId}/details(categoryId=${category.id})}">詳細</a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
