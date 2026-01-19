@@ -27,12 +27,16 @@ public class TaskForm {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate dueDate;
 
+  @NotNull(message = "必須です")
+  private Status currentStatus = Status.TODO;
+
   public Task toNewTask() {
-    Task task = new Task(null, this.categoryId, this.title, this.dueDate);
+    Task task = new Task(null, this.categoryId, this.title, this.dueDate, this.currentStatus);
     return task;
   }
 
   public Task toUpdatedTask(Task existingTask) {
-    return new Task(existingTask.getId(), this.categoryId, this.title, this.dueDate);
+    return new Task(existingTask.getId(), this.categoryId, this.title, this.dueDate,
+        this.currentStatus);
   }
 }

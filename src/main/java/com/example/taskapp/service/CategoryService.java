@@ -22,6 +22,6 @@ public class CategoryService {
   @Transactional(readOnly = true)
   public Category getCategory(long categoryId) {
     return categoryRepository.findById(categoryId)
-        .orElseThrow(() -> new CategoryNotFoundException("not found category"));
+        .orElseThrow(() -> new CategoryNotFoundException("カテゴリが見つかりません"));
   }
 }

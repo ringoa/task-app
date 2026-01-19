@@ -28,6 +28,20 @@
         th:if="${category.id == task.categoryId}"
         th:text="${category.name}"></td>
     <td th:text="${task.dueDate}"></td>
+    <td>
+      <form th:action="@{/tasks/{id}/updateStatus(id=${task.id})}" th:method="POST">
+        <button
+            name="status"
+            th:class="${status == task.currentStatus} ? 'highlight-' + ${status.name().toLowerCase()} : ''"
+            th:disabled="${status == task.currentStatus}"
+            th:each="status : ${statuses}"
+            th:text="${status}"
+            th:value="${status}"
+            type="submit"
+        >
+        </button>
+      </form>
+    </td>
     <td><a th:href="@{/tasks/{id}/edit(id=${task.id})}">編集</a></td>
     <td>
       <form method="post" th:action="@{/tasks/{id}/delete(id=${task.id})}">

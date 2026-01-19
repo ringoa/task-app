@@ -1,6 +1,7 @@
 package com.example.taskapp.controller;
 
 import com.example.taskapp.model.Category;
+import com.example.taskapp.model.Status;
 import com.example.taskapp.model.Task;
 import com.example.taskapp.model.TaskForm;
 import com.example.taskapp.service.CategoryService;
@@ -32,6 +33,11 @@ public class TaskController {
     return categoryService.getCategories();
   }
 
+  @ModelAttribute("statuses")
+  public Status[] getStatuses() {
+    return Status.values();
+  }
+
   @GetMapping("/tasks")
   public String showTasks(
       @RequestParam(defaultValue = "0")
@@ -46,6 +52,15 @@ public class TaskController {
     model.addAttribute("size", size);
 
     return "tasks";
+  }
+
+  @PostMapping("/tasks/{id}/updateStatus")
+  public String updateStatus(
+      @RequestParam Status status,
+      @PathVariable long id
+  ) {
+    taskService.updateStatus(id, status);
+    return "redirect:/tasks";
   }
 
   @GetMapping("/tasks/new")
@@ -76,7 +91,12 @@ public class TaskController {
   public String showEditTask(Model model, @PathVariable long id) {
     Task task = taskService.getTask(id);
 
-    TaskForm form = new TaskForm(task.getTitle(), task.getCategoryId(), task.getDueDate());
+    TaskForm form = new TaskForm(
+        task.getTitle(),
+        task.getCategoryId(),
+        task.getDueDate(),
+        task.getCurrentStatus()
+    );
 
     model.addAttribute("form", form);
     model.addAttribute("id", id);
@@ -94,7 +114,7 @@ public class TaskController {
     if (br.hasErrors()) {
       return "edit";
     }
-    taskService.update(id, updatedTask);
+    taskService.updateTask(id, updatedTask);
 
     ra.addFlashAttribute("message", "タスクを更新しました");
 

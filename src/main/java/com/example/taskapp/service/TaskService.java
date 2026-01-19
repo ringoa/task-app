@@ -2,6 +2,7 @@ package com.example.taskapp.service;
 
 import com.example.taskapp.controller.CategoryNotFoundException;
 import com.example.taskapp.controller.PageNotFoundException;
+import com.example.taskapp.model.Status;
 import com.example.taskapp.model.Task;
 import com.example.taskapp.model.TaskForm;
 import com.example.taskapp.repository.CategoryRepository;
@@ -23,22 +24,34 @@ public class TaskService {
   @Transactional
   public void create(TaskForm form) {
     categoryRepository.findById(form.getCategoryId())
-        .orElseThrow(() -> new CategoryNotFoundException("not found category"));
+        .orElseThrow(() -> new CategoryNotFoundException("カテゴリが見つかりません"));
     Task task = form.toNewTask();
     TaskRepository.save(task);
   }
 
   @Transactional
-  public void update(Long id, TaskForm form) {
+  public void updateTask(Long id, TaskForm form) {
     Task existingTask = TaskRepository.getTaskById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Task not found"));
+        .orElseThrow(() -> new IllegalArgumentException("タスクが見つかりません"));
 
     categoryRepository.findById(form.getCategoryId())
-        .orElseThrow(() -> new CategoryNotFoundException("not found category"));
+        .orElseThrow(() -> new CategoryNotFoundException("カテゴリが見つかりません"));
 
     Task updatedTask = form.toUpdatedTask(existingTask);
 
     TaskRepository.save(updatedTask);
+  }
+
+  @Transactional
+  public void updateStatus(Long id, Status newStatus) {
+    try {
+      Task task = TaskRepository.getTaskById(id)
+          .orElseThrow(() -> new IllegalArgumentException("タスクが見つかりません"));
+      task.setCurrentStatus(newStatus);
+      TaskRepository.save(task);
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException("ステータスが見つかりません");
+    }
   }
 
   @Transactional
@@ -49,7 +62,7 @@ public class TaskService {
   @Transactional(readOnly = true)
   public Task getTask(long id) {
     return TaskRepository.getTaskById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Task not found"));
+        .orElseThrow(() -> new IllegalArgumentException("タスクが見つかりません"));
   }
 
   @Transactional(readOnly = true)
