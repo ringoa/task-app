@@ -45,7 +45,7 @@ public class TaskService {
   @Transactional
   public void updateStatus(Long id, Status newStatus) {
     try {
-      Task task = TaskRepository.getTaskById(id)
+      Task task = TaskRepository.getTaskByIdForUpdate(id)
           .orElseThrow(() -> new IllegalArgumentException("タスクが見つかりません"));
       task.setCurrentStatus(newStatus);
       TaskRepository.save(task);

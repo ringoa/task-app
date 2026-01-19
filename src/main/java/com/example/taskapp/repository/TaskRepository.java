@@ -26,6 +26,10 @@ public class TaskRepository {
     return dao.findById(id);
   }
 
+  public Optional<Task> getTaskByIdForUpdate(long id) {
+    return dao.findByIdForUpdate(id);
+  }
+
   public void delete(Long id) {
     dao.deleteById(id);
   }

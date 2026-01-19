@@ -14,4 +14,4 @@ INSERT INTO tasks (title, category_id, due_date, current_status) VALUES
 ('タイトル6', 1, CURRENT_DATE, 'DONE'),
 ('タイトル7', 2, CURRENT_DATE, 'TODO'),
 ('タイトル8', 1, CURRENT_DATE, 'DOING'),
-('タイトル9', 1, CURRENT_DATE, 'DONE'),
+('タイトル9', 1, CURRENT_DATE, 'DONE');
