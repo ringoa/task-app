@@ -19,7 +19,7 @@
     <td th:text="${category.name}"></td>
     <td th:text="${category.id}"></td>
     <td>
-      <a th:href="@{categories/{categoryId}/details(categoryId=${category.id})}">詳細</a>
+      <a th:href="@{/categories/{categoryId}/details(categoryId=${category.id})}">詳細</a>
     </td>
   </tr>
   </tbody>
