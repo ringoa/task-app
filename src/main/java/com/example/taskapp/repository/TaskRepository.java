@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
-// TaskRepositoryの実装クラス
+// taskRepositoryの実装クラス
 // TaskServiceから呼び出される
 @Repository
 @AllArgsConstructor

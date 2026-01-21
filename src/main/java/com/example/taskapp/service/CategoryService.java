@@ -1,6 +1,6 @@
 package com.example.taskapp.service;
 
-import com.example.taskapp.controller.CategoryNotFoundException;
+import com.example.taskapp.controller.ResourceNotFoundException;
 import com.example.taskapp.model.Category;
 import com.example.taskapp.repository.CategoryRepository;
 import java.util.List;
@@ -22,6 +22,6 @@ public class CategoryService {
   @Transactional(readOnly = true)
   public Category getCategory(long categoryId) {
     return categoryRepository.findById(categoryId)
-        .orElseThrow(() -> new CategoryNotFoundException("カテゴリが見つかりません"));
+        .orElseThrow(() -> new ResourceNotFoundException("カテゴリが見つかりません"));
   }
 }

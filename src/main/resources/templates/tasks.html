@@ -30,6 +30,8 @@
     <td th:text="${task.dueDate}"></td>
     <td>
       <form th:action="@{/tasks/{id}/updateStatus(id=${task.id})}" th:method="POST">
+        <input name="currentPage" th:value="${currentPage}" type="hidden"/>
+        <input name="size" th:value="${size}" type="hidden"/>
         <button
             name="status"
             th:class="${status == task.currentStatus} ? 'highlight-' + ${status.name().toLowerCase()} : ''"

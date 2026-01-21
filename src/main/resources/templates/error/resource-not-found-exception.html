@@ -6,10 +6,9 @@
   <link rel="stylesheet" th:href="@{/error.css}">
 </head>
 <body>
-<h2>タスクが見つかりません</h2>
+<h2>リソースが見つかりません</h2>
 <p th:text="${exception}"></p>
 <p th:text="${message}"></p>
-<p>id: <span th:text="${id}"></span></p>
 <a th:href="@{/tasks}">一覧に戻る</a>
 </body>
 </html>
