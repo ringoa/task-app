@@ -11,30 +11,18 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-  @ExceptionHandler(IllegalArgumentException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  public String notFoundTaskException(
-      IllegalArgumentException ex,
-      Model model
-  ) {
-    model.addAttribute("exception", ex.getClass().getSimpleName());
-    model.addAttribute("message", ex.getMessage());
-    return "error/not-found-task";
-  }
-
   @ExceptionHandler({
       MethodArgumentTypeMismatchException.class,
-      PageNotFoundException.class,
       HandlerMethodValidationException.class,
-      CategoryNotFoundException.class
+      ResourceNotFoundException.class
   })
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public String handlePageNotNumber(
+  public String handleResourceNotFound(
       Model model,
       Exception ex
   ) {
     model.addAttribute("exception", ex.getClass().getSimpleName());
     model.addAttribute("message", ex.getMessage());
-    return "error/page-missing";
+    return "error/resource-not-found-exception";
   }
 }

@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
-// TaskRepositoryの実装クラス
+// taskRepositoryの実装クラス
 // TaskServiceから呼び出される
 @Repository
 @AllArgsConstructor
@@ -24,6 +24,10 @@ public class TaskRepository {
 
   public Optional<Task> getTaskById(long id) {
     return dao.findById(id);
+  }
+
+  public Optional<Task> getTaskByIdForUpdate(long id) {
+    return dao.findByIdForUpdate(id);
   }
 
   public void delete(Long id) {

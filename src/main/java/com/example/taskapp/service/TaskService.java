@@ -1,7 +1,7 @@
 package com.example.taskapp.service;
 
-import com.example.taskapp.controller.CategoryNotFoundException;
-import com.example.taskapp.controller.PageNotFoundException;
+import com.example.taskapp.controller.ResourceNotFoundException;
+import com.example.taskapp.model.Status;
 import com.example.taskapp.model.Task;
 import com.example.taskapp.model.TaskForm;
 import com.example.taskapp.repository.CategoryRepository;
@@ -17,46 +17,54 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 public class TaskService {
 
-  private final TaskRepository TaskRepository;
+  private final TaskRepository taskRepository;
   private final CategoryRepository categoryRepository;
 
   @Transactional
   public void create(TaskForm form) {
     categoryRepository.findById(form.getCategoryId())
-        .orElseThrow(() -> new CategoryNotFoundException("not found category"));
+        .orElseThrow(() -> new ResourceNotFoundException("カテゴリが見つかりません"));
     Task task = form.toNewTask();
-    TaskRepository.save(task);
+    taskRepository.save(task);
   }
 
   @Transactional
-  public void update(Long id, TaskForm form) {
-    Task existingTask = TaskRepository.getTaskById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Task not found"));
+  public void updateTask(Long id, TaskForm form) {
+    Task existingTask = taskRepository.getTaskById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("タスクが見つかりません"));
 
     categoryRepository.findById(form.getCategoryId())
-        .orElseThrow(() -> new CategoryNotFoundException("not found category"));
+        .orElseThrow(() -> new ResourceNotFoundException("カテゴリが見つかりません"));
 
     Task updatedTask = form.toUpdatedTask(existingTask);
 
-    TaskRepository.save(updatedTask);
+    taskRepository.save(updatedTask);
+  }
+
+  @Transactional
+  public void updateStatus(Long id, Status newStatus) {
+    Task task = taskRepository.getTaskByIdForUpdate(id)
+        .orElseThrow(() -> new ResourceNotFoundException("タスクが見つかりません"));
+    task.setCurrentStatus(newStatus);
+    taskRepository.save(task);
   }
 
   @Transactional
   public void delete(long id) {
-    TaskRepository.delete(id);
+    taskRepository.delete(id);
   }
 
   @Transactional(readOnly = true)
   public Task getTask(long id) {
-    return TaskRepository.getTaskById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Task not found"));
+    return taskRepository.getTaskById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("タスクが見つかりません"));
   }
 
   @Transactional(readOnly = true)
   public Page<Task> getPage(int page, int size) {
-    Page<Task> taskPage = TaskRepository.findPageOrderedByIdDesc(page, size);
+    Page<Task> taskPage = taskRepository.findPageOrderedByIdDesc(page, size);
     if (page >= taskPage.getTotalPages()) {
-      throw new PageNotFoundException("ページがありません");
+      throw new ResourceNotFoundException("ページがありません");
     }
     return taskPage;
   }

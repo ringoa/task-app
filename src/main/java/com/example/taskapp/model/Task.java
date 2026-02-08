@@ -20,4 +20,6 @@ public class Task {
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate dueDate;
+
+  private Status currentStatus;
 }

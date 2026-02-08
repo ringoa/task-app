@@ -59,3 +59,16 @@ td {
   border-color: #eee;
   cursor: not-allowed;
 }
+
+.highlight-todo{
+  background: yellow;
+  color: white;
+}
+.highlight-doing{
+  background: blue;
+  color: white;
+}
+.highlight-done{
+  background: green;
+  color: white;
+}
