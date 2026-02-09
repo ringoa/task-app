@@ -33,7 +33,8 @@ public class TaskService {
   @Transactional
   public Task create(TaskForm form) {
     categoryRepository.findById(form.getCategoryId())
-        .orElseThrow(() -> new ResourceNotFoundException("指定されたリソースは存在しません"));
+        .orElseThrow(() -> new ResourceNotFoundException(
+            "カテゴリが見つかりません id=" + form.getCategoryId()));
     Task task = form.toNewTask();
     taskRepository.save(task);
     return task;
@@ -42,10 +43,11 @@ public class TaskService {
   @Transactional
   public Task updateTask(Long id, TaskForm form) {
     Task existingTask = taskRepository.getTaskById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("指定されたリソースは存在しません"));
+        .orElseThrow(() -> new ResourceNotFoundException("タスクが見つかりません id=" + id));
 
     categoryRepository.findById(form.getCategoryId())
-        .orElseThrow(() -> new ResourceNotFoundException("指定されたリソースは存在しません"));
+        .orElseThrow(() -> new ResourceNotFoundException(
+            "カテゴリが見つかりません id=" + form.getCategoryId()));
 
     Task updatedTask = form.toUpdatedTask(existingTask);
 
@@ -56,7 +58,7 @@ public class TaskService {
   @Transactional
   public void updateStatus(Long id, Status newStatus) {
     Task task = taskRepository.getTaskByIdForUpdate(id)
-        .orElseThrow(() -> new ResourceNotFoundException("指定されたリソースは存在しません"));
+        .orElseThrow(() -> new ResourceNotFoundException("タスクが見つかりません id=" + id));
     task.setCurrentStatus(newStatus);
     taskRepository.save(task);
   }
@@ -64,21 +66,21 @@ public class TaskService {
   @Transactional
   public void delete(long id) {
     taskRepository.getTaskById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("指定されたリソースは存在しません"));
+        .orElseThrow(() -> new ResourceNotFoundException("タスクが見つかりません id=" + id));
     taskRepository.delete(id);
   }
 
   @Transactional(readOnly = true)
   public Task getTask(long id) {
     return taskRepository.getTaskById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("指定されたリソースは存在しません"));
+        .orElseThrow(() -> new ResourceNotFoundException("タスクが見つかりません id=" + id));
   }
 
   @Transactional(readOnly = true)
   public Page<Task> getPage(int page, int size) {
     Page<Task> taskPage = taskRepository.findPageOrderedByIdDesc(page, size);
     if (page >= taskPage.getTotalPages()) {
-      throw new ResourceNotFoundException("指定されたリソースは存在しません");
+      throw new ResourceNotFoundException("ページが存在しません");
     }
     return taskPage;
   }

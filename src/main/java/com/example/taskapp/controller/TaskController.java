@@ -49,7 +49,6 @@ public class TaskController {
   ) {
     Page<Task> taskPage = taskService.getPage(page, size);
 
-
     model.addAttribute("taskPage", taskPage);
     model.addAttribute("currentPage", page);
     model.addAttribute("size", size);

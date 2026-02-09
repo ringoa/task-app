@@ -32,7 +32,6 @@ public class TaskApiController {
   private final TaskService taskService;
 
   @GetMapping
-  @ResponseStatus(HttpStatus.OK)
   public TaskPageResponse showTasks(
       @RequestParam(defaultValue = "0")
       @Min(value = 0, message = "ページがありません") int page,
@@ -43,7 +42,6 @@ public class TaskApiController {
   }
 
   @GetMapping("/{id}")
-  @ResponseStatus(HttpStatus.OK)
   public TaskDetailsResponse showTaskDetails(
       @PathVariable long id
   ) {
@@ -62,7 +60,6 @@ public class TaskApiController {
   }
 
   @PutMapping("/{id}")
-  @ResponseStatus(HttpStatus.OK)
   public TaskResponse updateRequest(
       @PathVariable long id,
       @Valid @RequestBody TaskUpdateRequest request
